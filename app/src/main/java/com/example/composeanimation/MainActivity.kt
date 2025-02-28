@@ -8,15 +8,21 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Call
@@ -31,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
@@ -38,16 +45,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Column(
+            LazyColumn(
                 Modifier
                     .fillMaxSize()
                     .statusBarsPadding()
                     .padding(10.dp)
             ) {
-                ColorAnimation()
-                MultiPropAnimation()
-                VisbilityAnimation()
-                CrossFadeAnimation()
+                item {
+                    ColorAnimation()
+                    MultiPropAnimation()
+                    VisbilityAnimation()
+                    CrossFadeAnimation()
+                    ContentSizeAnimation()
+                }
             }
         }
     }
@@ -130,5 +140,29 @@ fun CrossFadeAnimation() {
                 false -> Icon(Icons.Default.Call, contentDescription = "")
             }
         }
+    }
+}
+
+@Composable
+fun ContentSizeAnimation() {
+    var toggle by remember { mutableStateOf(false) }
+    Column {
+        Button(onClick = { toggle = !toggle }) {
+            Text("Change Size")
+        }
+//        Text(
+//            text = """
+//            Lorem ipsum dolor sit amet, proident est consequat et occaecat irure incididunt fugiat proident proident quis qui magna excepteur ea ea esse mollit et consectetur consectetur id nostrud ex laboris cupidatat deserunt dolor ullamco mollit dolor ut consectetur ad ut sed duis sed consequat magna ullamco nostrud consectetur sint deserunt veniam qui ea dolore labore enim irure et enim qui anim magna quis ex in duis id laborum tempor ex nulla fugiat veniam nulla culpa eiusmod dolor mollit elit occaecat nulla adipiscing ut fugiat qui sed elit consequat aute aliquip minim minim excepteur enim id adipiscing est minim magna id ullamco fugiat mollit labore sunt
+//            """.trimIndent(),
+//            maxLines = if (toggle) Int.MAX_VALUE else 2,
+//            modifier = Modifier.animateContentSize(animationSpec = tween(durationMillis = 300))
+//        )
+        Box(
+            Modifier
+                .height(50.dp)
+                .width(if (toggle) 50.dp else 100.dp)
+                .background(Color.Red)
+                .animateContentSize()
+        )
     }
 }
